@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './model/user.model';
 import { InjectModel } from '@nestjs/sequelize';
+import { Group } from './model/group.model';
 
 @Injectable()
 export class UserService {
@@ -17,15 +18,19 @@ export class UserService {
     return this.userModel.findAll();
   }
 
-  findOne(id: string): Promise<User> {
-    return this.userModel.findOne({
+  async findOne(id: number): Promise<User> {
+    const us = await this.userModel.findOne({
       where: {
         id,
       },
+      include: Group
     });
+    console.log('group');
+    console.log(us.group);
+    return us;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const user = await this.findOne(id);
     await user.destroy();
   }

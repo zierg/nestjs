@@ -1,4 +1,6 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript';
+import { UserGroup } from './user.group.model';
+import { Group } from './group.model';
 
 @Table({ tableName: 'users' })
 export class User extends Model {
@@ -10,4 +12,7 @@ export class User extends Model {
 
   @Column({ field: 'is_active', defaultValue: true })
   isActive: boolean;
+
+  @BelongsToMany(() => Group, () => UserGroup)
+  group: Group;
 }
